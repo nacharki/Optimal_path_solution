@@ -26,7 +26,7 @@ The back-end is developed using python. It contains:
 ### CLI
 The command-line interface can be executed in shell, for example1, as follows:
 ```sh
-  $ python give-me-the-odds example1/millennium-falcon.json example1/empire.json
+  $ python give-me-the-odds.py example1/millennium-falcon.json example1/empire.json
 ```
 
 ### Web Application
