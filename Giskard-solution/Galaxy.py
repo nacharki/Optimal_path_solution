@@ -152,11 +152,11 @@ class Millennium_falcon(Empire):
 
 
 if __name__ == "__main__": 
-    input_frontend = 'exemple1/empire.json'
+    input_frontend = 'example4/empire.json'
     Empire_json = pd.read_json(input_frontend, typ='series')
     empire = Empire(Empire_json.countdown, Empire_json.bounty_hunters)
 
-    input_backend = 'exemple1/millennium-falcon.json'
+    input_backend = 'example4/millennium-falcon.json'
     MF_json = pd.read_json(input_backend, typ='series') 
     millennium_falcon = Millennium_falcon(MF_json.autonomy, MF_json.departure, MF_json.arrival, MF_json.routes_db,
                                         empire.countdown, empire.bounty_hunters)
@@ -164,5 +164,6 @@ if __name__ == "__main__":
     result = Millennium_falcon.give_me_the_odds(millennium_falcon)
     odds = result[0]
     optim_path = result[1]
-    print(odds)
+    print('The probability of success (odds) is:' + str(odds) )
+    print('The optimal path is:' + '_'.join(map(str,optim_path)) )
     
