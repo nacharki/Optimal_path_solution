@@ -21,6 +21,18 @@ The back-end is developed using python. It contains:
   
 ### Illustration on examples 1 to 4
 
+For Example 1:
+![Example1](resources/example1.png)
+
+For Example 2:
+![Example2](resources/example2.png)
+
+For Example 3:
+![Example3](resources/example3.png)
+
+For Example 4:
+![Example4](resources/example4.png)
+
 ## Guide to run the final application ##
 
 ### CLI
