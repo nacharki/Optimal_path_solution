@@ -21,5 +21,5 @@ In a command-line (e.g. Powershell), execute the following command:
 ```sh
   $ flask --app webapp run
 ```
-to launch the page application (link http://127.0.0.1:5000), upload the empire.json file and click on get the odds to obtain the result.
-
+to launch the page application (e.g. with the link http://127.0.0.1:5000), upload the empire.json file and click on get the odds to obtain the result.
+![Never tell me the odds](resources/web_application.png)
