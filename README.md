@@ -16,4 +16,10 @@ The command-line interface can be executed in shell, for example1, as follows:
   $ python give-me-the-odds example1/millennium-falcon.json example1/empire.json
 ```
 
+### Web Application
+In a command-line (e.g. Powershell), execute the following command:
+```sh
+  $ flask --app webapp run
+```
+to launch the page application (link http://127.0.0.1:5000), upload the empire.json file and click on get the odds to obtain the result.
 
