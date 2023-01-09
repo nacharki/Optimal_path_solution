@@ -6,10 +6,19 @@ The front-end is developed using HTML in index.html. It is created using jquery 
   
 ### Back-end
 The back-end is developed using python. It contains:
-  - The class Galaxy.py with two objects: Empire and Millennium Falcon, and all necessary methods to find feasible/acceptable/alternative/optimal paths and compute the odds of reaching Endor before the countdown. Note that Galaxy's methods require three librairies: pandas, networkx and sqlite3.
+  - The class Galaxy.py with two objects: Empire and Millennium Falcon, and all necessary methods:
+      - read_ROUTES(): Read the SQLite database and return pandas dataframe, called _routes_.
+      - create_Graph(): From the dataframe _routes_, return the associated _graph_ whose nodes are _origins_ and _destinations_ and the edges denote _travel time_.
+      - find_feasible_paths(): Find all feasible paths from _Departure_ to _Arrival_ that satisfy the constraint of millennium falcon's autonomy
+      - find_acceptable_paths(): Find all (direct) acceptable paths such that the Millennium falcon reaches Endor before countdown
+      - find_alternative_paths(): Find all alternative paths when there is a delay (e.g. 1 day) between the expected arrival day and the countdown, where the millennium falcon can make a stop during this delay.
+      - give_me_the_odds(): Compute the odds that the Millennium Falcon reaches Endor in time and saves the galaxy. _Bonus: this function returns also the optimal path corresponding the odds_
+    Note that Galaxy's methods require three librairies: _pandas_, _networkx_ and _sqlite3_.
   - The executable give-me-the-odds.py, to be executed in the command-line interface (CLI).
   - The back-front connection webapp.py created using the library flask.
   
+## Illustration on examples 1 to 4 ##
+
 ### CLI
 The command-line interface can be executed in shell, for example1, as follows:
 ```sh
