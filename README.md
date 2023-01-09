@@ -1,6 +1,8 @@
 # Giskard technical test solution
 Here is my solution to the odds technical test.
 
+## Tools ##
+
 ### Front-end
 The front-end is developed using HTML in index.html. It is created using jquery and ajax for minimal single-web-application creation
   
@@ -17,7 +19,9 @@ The back-end is developed using python. It contains:
   - The executable give-me-the-odds.py, to be executed in the command-line interface (CLI).
   - The back-front connection webapp.py created using the library flask.
   
-## Illustration on examples 1 to 4 ##
+### Illustration on examples 1 to 4
+
+## Guide to run the final application ##
 
 ### CLI
 The command-line interface can be executed in shell, for example1, as follows:
