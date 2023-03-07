@@ -1,4 +1,4 @@
-# Giskard technical test solution
+# Technical test solution
 Here is my solution to the odds technical test.
 
 ## Tools ##
