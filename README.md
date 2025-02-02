@@ -3,7 +3,7 @@
 > This repository contains my solution to the [Developer Technical Test](https://github.com/lioncowlionant/developer-test) by lioncowlionant.
 
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Flask](https://img.shields.io/badge/flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
+[![Streamlit](https://img.shields.io/badge/streamlit-2.0+-green.svg)](https://flask.palletsprojects.com/)
 [![jQuery](https://img.shields.io/badge/jquery-3.6+-yellow.svg)](https://jquery.com/)
 
 A simple application to calculate the odds of the Millennium Falcon successfully reaching Endor and saving the galaxy. This solution implements both CLI and web interfaces for computing probabilities based on complex route calculations and Empire interceptor locations.
@@ -27,7 +27,7 @@ Multiple possible paths and refueling strategies
 
 ### Backend
 - Python 3.8+ for core logic
-- Flask for web server implementation
+- Streamlit for web server implementation
 - SQLite for route database
 - Key libraries:
   - `pandas` for data manipulation
@@ -60,10 +60,10 @@ Key Methods:
 
 ### Prerequisites
 - Python 3.8 or higher
-- Flask framework
+- Streamlit framework
 - Required Python packages:
   ```bash
-  pip install pandas networkx flask
+  pip install pandas networkx streamlit
   ```
 
 ### Command Line Usage
@@ -73,7 +73,7 @@ python give-me-the-odds.py <millennium-falcon.json> <empire.json>
 
 ### Web Application Launch
 ```bash
-flask --app webapp run
+streamlit run webapp.py
 ```
 Access the application at `http://127.0.0.1:5000`
 
@@ -98,11 +98,13 @@ Demonstrates complex probability calculations with multiple variables.
 ## 🌐 Web Interface
 ![Web Application Interface](resources/Web_application.png)
 
-The web interface provides an intuitive way to:
-1. Upload Empire data files
-2. Visualize potential routes
-3. Calculate success probabilities
-4. View detailed path analysis
+The Streamlit-powered interface provides:
+1. Interactive file upload and validation
+2. Real-time route visualization with Plotly
+3. Dynamic probability calculations
+4. Mission metrics dashboard
+5. Interactive path analysis
+6. Responsive design for all devices
 
 ## 🤝 Contributing
 Contributions are welcome! Please feel free to reach out with any suggestions or improvements.
