@@ -1,55 +1,122 @@
-# Technical test solution
-Here is my solution to the odds technical test.
+# Millennium Falcon Calculator 
 
-## Tools ##
+> This repository contains my solution to the [Developer Technical Test](https://github.com/lioncowlionant/developer-test) by lioncowlionant.
 
-### Front-end
-The front-end is developed using HTML in index.html. It is created using jquery and ajax for minimal single-web-application creation
-  
-### Back-end
-The back-end is developed using python. It contains:
-  - The class Galaxy.py with two objects: Empire and Millennium Falcon, and all necessary methods:
-      - read_ROUTES(): Read the SQLite database and return pandas dataframe, called _routes_.
-      - create_Graph(): From the dataframe _routes_, return the associated _graph_ whose nodes are _origins_ and _destinations_ and the edges denote _travel time_.
-      - find_feasible_paths(): Find all feasible paths from _Departure_ to _Arrival_ that satisfy the constraint of millennium falcon's autonomy
-      - find_acceptable_paths(): Find all (direct) acceptable paths such that the Millennium falcon reaches Endor before countdown
-      - find_alternative_paths(): Find all alternative paths when there is a delay (e.g. 1 day) between the expected arrival day and the countdown, where the millennium falcon can make a stop during this delay.
-      - give_me_the_odds(): Compute the odds that the Millennium Falcon reaches Endor in time and saves the galaxy. _Bonus: this function returns also the optimal path corresponding the odds_
-    Note that Galaxy's methods require three librairies: _pandas_, _networkx_ and _sqlite3_.
-  - The executable give-me-the-odds.py, to be executed in the command-line interface (CLI).
-  - The back-front connection webapp.py created using the library flask.
-  
-### Illustration on examples 1 to 4
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Flask](https://img.shields.io/badge/flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
+[![jQuery](https://img.shields.io/badge/jquery-3.6+-yellow.svg)](https://jquery.com/)
 
-For Example 1:
+A simple application to calculate the odds of the Millennium Falcon successfully reaching Endor and saving the galaxy. This solution implements both CLI and web interfaces for computing probabilities based on complex route calculations and Empire interceptor locations.
 
-![Example1](resources/example1.png)
+## 📋 Problem Statement
 
-For Example 2:
+This project implements a solution for computing the probability of the Millennium Falcon reaching Endor before the Death Star destroys the planet. The calculation takes into account various factors including:
 
-![Example2](resources/example2.png)
+Route optimization with fuel constraints
+Empire bounty hunter presence
+Time-based countdown mechanics
+Multiple possible paths and refueling strategies
 
-For Example 3:
+- Route optimization with fuel constraints
+- Empire bounty hunter presence
+- Time-based countdown mechanics
+- Multiple possible paths and refueling strategies
 
-![Example3](resources/example3.png)
+## 🛠️ Technical Stack
 
-For Example 4:
 
-![Example4](resources/example4.png)
+### Backend
+- Python 3.8+ for core logic
+- Flask for web server implementation
+- SQLite for route database
+- Key libraries:
+  - `pandas` for data manipulation
+  - `networkx` for graph calculations
+  - `sqlite3` for database interactions
 
-## Guide to run the final application ##
+## 🏗️ Architecture
 
-### CLI
-The command-line interface can be executed in shell, for example1, as follows:
-```sh
-  $ python give-me-the-odds.py example1/millennium-falcon.json example1/empire.json
+### Core Components
+
+#### Galaxy Class
+The heart of the application, implementing core game logic:
+
+```python
+class Galaxy:
+    def __init__(self):
+        self.empire = None
+        self.millennium_falcon = None
 ```
 
-### Web Application
-In a command-line (e.g. Powershell), execute the following command:
-```sh
-  $ flask --app webapp run
-```
-to launch the page application (e.g. with the link http://127.0.0.1:5000), upload the empire.json file and click on get the odds to obtain the result.
+Key Methods:
+- `read_ROUTES()`: Database interaction for route retrieval
+- `create_Graph()`: Graph construction from route data
+- `find_feasible_paths()`: Path calculation within autonomy constraints
+- `find_acceptable_paths()`: Direct path validation against countdown
+- `find_alternative_paths()`: Alternative route calculation with delays
+- `give_me_the_odds()`: Final probability computation with optimal path
 
-![Illustration](resources/Web_application.png)
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.8 or higher
+- Flask framework
+- Required Python packages:
+  ```bash
+  pip install pandas networkx flask
+  ```
+
+### Command Line Usage
+```bash
+python give-me-the-odds.py <millennium-falcon.json> <empire.json>
+```
+
+### Web Application Launch
+```bash
+flask --app webapp run
+```
+Access the application at `http://127.0.0.1:5000`
+
+## 📊 Examples
+
+### Example 1: Basic Route
+![Example 1 Visualization](resources/example1.png)
+Demonstrates basic path finding with minimal constraints.
+
+### Example 2: Complex Routing
+![Example 2 Visualization](resources/example2.png)
+Shows multiple path options with interceptor consideration.
+
+### Example 3: Delay Management
+![Example 3 Visualization](resources/example3.png)
+Illustrates route optimization with timing constraints.
+
+### Example 4: Advanced Scenario
+![Example 4 Visualization](resources/example4.png)
+Demonstrates complex probability calculations with multiple variables.
+
+## 🌐 Web Interface
+![Web Application Interface](resources/Web_application.png)
+
+The web interface provides an intuitive way to:
+1. Upload Empire data files
+2. Visualize potential routes
+3. Calculate success probabilities
+4. View detailed path analysis
+
+## 🤝 Contributing
+Contributions are welcome! Please feel free to reach out with any suggestions or improvements.
+
+## 📝 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🎯 Future Improvements
+- Real-time route visualization
+- Additional optimization algorithms
+- Enhanced probability calculations
+- Interactive route planning
+- Performance optimizations for large datasets
+
+## ✨ Acknowledgments
+- Original problem statement by [lioncowlionant].
+- Inspiration from Star Wars universe.
