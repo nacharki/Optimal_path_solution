@@ -1,13 +1,12 @@
 """
 Millennium Falcon Odds Calculator - Streamlit Web Application
 
-A modern web interface for calculating the odds of the Millennium Falcon 
+A modern web interface for calculating the odds of the Millennium Falcon
 successfully reaching Endor.
 """
 
 import streamlit as st
 import json
-from pathlib import Path
 from typing import Dict, Tuple
 import plotly.express as px
 import networkx as nx
@@ -15,9 +14,6 @@ import networkx as nx
 from Galaxy import Empire, MillenniumFalcon
 
 # Configuration
-MILLENNIUM_FALCON_CONFIG = Path("./millennium-falcon.json")
-
-# Page configuration
 st.set_page_config(
     page_title="Millennium Falcon Mission Calculator",
     page_icon="🚀",
@@ -124,12 +120,9 @@ def create_route_visualization(falcon: MillenniumFalcon, optimal_path: list):
     return fig
 
 
-def compute_odds(empire_data: Dict) -> Tuple[float, list]:
+def compute_odds(falcon_data: Dict, empire_data: Dict) -> Tuple[float, list]:
     """Calculate mission success probability."""
     try:
-        # Load Millennium Falcon configuration
-        falcon_data = load_json_file(MILLENNIUM_FALCON_CONFIG.read_text())
-
         # Initialize game objects
         empire = Empire(
             countdown=empire_data["countdown"],
@@ -162,87 +155,112 @@ def main():
     st.markdown(
         """
         Calculate the odds of successfully reaching Endor and saving the galaxy!
-        Upload your Empire intelligence data below.
+        Upload both configuration files below.
     """
     )
 
-    # File upload
-    uploaded_file = st.file_uploader(
-        "Upload Empire Configuration (JSON)",
-        type=["json"],
-        help="Select the empire.json file containing countdown and bounty hunter information",
-    )
+    # File upload section
+    col1, col2 = st.columns(2)
 
-    if uploaded_file:
-        empire_data = load_json_file(uploaded_file.read())
+    with col1:
+        st.subheader("Millennium Falcon Configuration")
+        falcon_file = st.file_uploader(
+            "Upload millennium-falcon.json",
+            type=["json"],
+            help="Select the millennium-falcon.json file containing ship configuration",
+        )
 
-        if empire_data:
-            # Create columns for layout
-            col1, col2 = st.columns([2, 1])
+    with col2:
+        st.subheader("Empire Intelligence")
+        empire_file = st.file_uploader(
+            "Upload empire.json",
+            type=["json"],
+            help="Select the empire.json file containing countdown and bounty hunter information",
+        )
+
+    if falcon_file and empire_file:
+        falcon_data = load_json_file(falcon_file.read())
+        empire_data = load_json_file(empire_file.read())
+
+        if falcon_data and empire_data:
+            # Show configurations
+            col1, col2 = st.columns(2)
 
             with col1:
-                st.subheader("Mission Parameters")
-                st.json(empire_data)
+                st.subheader("Millennium Falcon Parameters")
+                st.json(falcon_data)
 
             with col2:
-                st.subheader("Calculation")
-                if st.button("Calculate Odds", key="calc_button"):
-                    odds, optimal_path, falcon = compute_odds(empire_data)
+                st.subheader("Empire Intelligence")
+                st.json(empire_data)
 
-                    if odds is not None:
-                        # Display results
-                        st.markdown("### Mission Success Probability")
-                        probability_text = f"{odds:.1f}%"
+            # Calculate button
+            if st.button("Calculate Odds", key="calc_button"):
+                odds, optimal_path, falcon = compute_odds(falcon_data, empire_data)
 
-                        if odds > 50:
-                            st.markdown(
-                                f'<p class="success-text">{probability_text}</p>',
-                                unsafe_allow_html=True,
-                            )
-                        else:
-                            st.markdown(
-                                f'<p class="failure-text">{probability_text}</p>',
-                                unsafe_allow_html=True,
-                            )
+                if odds is not None:
+                    # Display results
+                    st.markdown("### Mission Success Probability")
+                    probability_text = f"{odds:.1f}%"
 
-                        if optimal_path:
-                            st.markdown("### Optimal Route")
-                            st.write(" → ".join(optimal_path))
+                    if odds > 50:
+                        st.markdown(
+                            f'<p class="success-text">{probability_text}</p>',
+                            unsafe_allow_html=True,
+                        )
+                    else:
+                        st.markdown(
+                            f'<p class="failure-text">{probability_text}</p>',
+                            unsafe_allow_html=True,
+                        )
 
-                            # Create and display route visualization
-                            fig = create_route_visualization(falcon, optimal_path)
-                            st.plotly_chart(fig, use_container_width=True)
+                    if optimal_path:
+                        st.markdown("### Optimal Route")
+                        st.write(" → ".join(optimal_path))
 
-                        # Display additional metrics
-                        metrics_col1, metrics_col2, metrics_col3 = st.columns(3)
-                        with metrics_col1:
-                            st.metric(
-                                "Time to Destruction",
-                                f"{empire_data['countdown']} days",
-                            )
-                        with metrics_col2:
-                            st.metric(
-                                "Bounty Hunters", len(empire_data["bounty_hunters"])
-                            )
-                        with metrics_col3:
-                            st.metric(
-                                "Route Length",
-                                f"{len(optimal_path) - 1} jumps"
-                                if optimal_path
-                                else "N/A",
-                            )
+                        # Create and display route visualization
+                        fig = create_route_visualization(falcon, optimal_path)
+                        st.plotly_chart(fig, use_container_width=True)
+
+                    # Display additional metrics
+                    metrics_col1, metrics_col2, metrics_col3 = st.columns(3)
+                    with metrics_col1:
+                        st.metric(
+                            "Time to Destruction", f"{empire_data['countdown']} days"
+                        )
+                    with metrics_col2:
+                        st.metric("Bounty Hunters", len(empire_data["bounty_hunters"]))
+                    with metrics_col3:
+                        st.metric(
+                            "Route Length",
+                            f"{len(optimal_path) - 1} jumps" if optimal_path else "N/A",
+                        )
 
     # Instructions
     with st.sidebar:
         st.header("Instructions")
         st.markdown(
             """
-        1. Prepare your Empire intelligence data in JSON format
-        2. Upload the file using the selector above
+        1. Upload both required configuration files:
+           - `millennium-falcon.json`: Ship configuration
+           - `empire.json`: Empire intelligence data
+        2. Review the loaded configurations
         3. Click "Calculate Odds" to analyze the mission
         4. Review the results and optimal route
 
-        ### File Format Example
+        ### File Format Examples
+
+        millennium-falcon.json:
+        ```json
+        {
+            "autonomy": 6,
+            "departure": "Tatooine",
+            "arrival": "Endor",
+            "routes_db": "universe.db"
+        }
+        ```
+
+        empire.json:
         ```json
         {
             "countdown": 7,
@@ -257,7 +275,7 @@ def main():
 
         # Add some Star Wars theming
         st.markdown("---")
-        st.markdown("*May the Force be with you!* ⚔️")
+        st.markdown("*May God be with you!* ⚔️")
 
 
 if __name__ == "__main__":
