@@ -8,8 +8,7 @@ successfully reaching Endor.
 import streamlit as st
 import json
 from typing import Dict, Tuple
-import plotly.express as px
-import networkx as nx
+import plotly.graph_objects as go
 
 from Galaxy import Empire, MillenniumFalcon
 
@@ -62,60 +61,100 @@ def load_json_file(file_content) -> Dict:
 
 def create_route_visualization(falcon: MillenniumFalcon, optimal_path: list):
     """Create an interactive route visualization."""
-    G = falcon.create_graph()
-
-    # Create positions for nodes
-    pos = nx.spring_layout(G)
-
-    # Create edge trace
-    edge_x = []
-    edge_y = []
-    for edge in G.edges():
-        x0, y0 = pos[edge[0]]
-        x1, y1 = pos[edge[1]]
-        edge_x.extend([x0, x1, None])
-        edge_y.extend([y0, y1, None])
-
-    # Create node trace
-    node_x = []
-    node_y = []
-    node_text = []
-    node_color = []
-
-    for node in G.nodes():
-        x, y = pos[node]
-        node_x.append(x)
-        node_y.append(y)
-        node_text.append(node)
-        if node in optimal_path:
-            node_color.append("#FF4B4B")  # Red for optimal path
-        else:
-            node_color.append("#1f77b4")  # Blue for other nodes
+    # Define fixed positions for known planets
+    planet_positions = {
+        "Tatooine": (0, 0),
+        "Hoth": (2, 2),
+        "Endor": (4, 0),
+        "Dagobah": (-1, 1),
+        "Bespin": (1, 3),
+    }
 
     # Create figure
-    fig = px.scatter(
-        x=node_x,
-        y=node_y,
-        text=node_text,
-        title="Galaxy Route Map",
+    fig = go.Figure()
+
+    # Add all planets as points
+    x_planets, y_planets, names = [], [], []
+    for planet, pos in planet_positions.items():
+        x_planets.append(pos[0])
+        y_planets.append(pos[1])
+        names.append(planet)
+
+    # Add planets
+    fig.add_trace(
+        go.Scatter(
+            x=x_planets,
+            y=y_planets,
+            mode="markers+text",
+            name="Planets",
+            text=names,
+            textposition="top center",
+            marker=dict(
+                size=20,
+                color="gold",
+                symbol="circle",
+                line=dict(color="white", width=2),
+            ),
+            hovertemplate="%{text}<extra></extra>",
+        )
     )
 
-    # Add edges
-    fig.add_scatter(
-        x=edge_x,
-        y=edge_y,
-        mode="lines",
-        line=dict(color="#888", width=1),
-        hoverinfo="none",
+    # Create path coordinates
+    path_x, path_y = [], []
+    for planet in optimal_path:
+        if planet in planet_positions:
+            path_x.append(planet_positions[planet][0])
+            path_y.append(planet_positions[planet][1])
+
+    # Add path line
+    fig.add_trace(
+        go.Scatter(
+            x=path_x,
+            y=path_y,
+            mode="lines+markers",
+            name="Route",
+            line=dict(color="#FF4B4B", width=3),
+            marker=dict(size=12, color="#FF4B4B", symbol="arrow", angleref="previous"),
+            hoverinfo="skip",
+        )
     )
 
     # Update layout
     fig.update_layout(
+        title=dict(text="Galaxy Route Map", x=0.5, font=dict(size=24, color="white")),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
         showlegend=False,
+        width=800,
+        height=500,
+        xaxis=dict(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="#333",
+            zeroline=False,
+            showticklabels=False,
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="#333",
+            zeroline=False,
+            showticklabels=False,
+        ),
+        margin=dict(l=20, r=20, t=40, b=20),
         hovermode="closest",
-        margin=dict(b=20, l=5, r=5, t=40),
-        plot_bgcolor="white",
     )
+
+    # Add route annotations
+    for i in range(len(optimal_path) - 1):
+        fig.add_annotation(
+            x=(path_x[i] + path_x[i + 1]) / 2,
+            y=(path_y[i] + path_y[i + 1]) / 2,
+            text=f"path {i+1}",
+            showarrow=False,
+            font=dict(size=12, color="white"),
+            bgcolor="rgba(0,0,0,0.5)",
+        )
 
     return fig
 
@@ -233,7 +272,7 @@ def main():
                     with metrics_col3:
                         st.metric(
                             "Route Length",
-                            f"{len(optimal_path) - 1} jumps" if optimal_path else "N/A",
+                            f"{len(optimal_path) - 1} paths" if optimal_path else "N/A",
                         )
 
     # Instructions
